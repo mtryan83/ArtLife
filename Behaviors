@@ -1,3 +1,7 @@
+**NO LONGER USED**
+Due to the inherent difficulty in running dynamic Java code as well as the inherent security risks, it was decided to discontinue the arbitrary java code section. Instead, behaviors will be represented as children of a Behavior class, a la the Command pattern.
+
+
 // This is a comment!
 // The following is an example behavior.  The indentation and white space are unnecessary, though it does help readability.
 //Behavior: EXAMPLE                                  // Declaration of new behavior, name does not need to be in all caps
