@@ -1,6 +1,8 @@
 package artlife;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import artlife.GridElement.terrain;
 
@@ -13,12 +15,14 @@ public class Grid{
     private static Random r;
     protected final int NUMFOOD=100;
     protected final int NUMORGS=20;
-    private static GridElement[] grid;
+    private ArrayList<Gridy> things;
+    private static GridElement[] grid, next;
     
     private Grid(){
     	r = new Random();
         grid = new GridElement[WIDTH*WIDTH];
         createTerrain();
+        next = Arrays.copyOf(grid, grid.length);
         createFood();
         createOrgs();
     }
@@ -75,12 +79,14 @@ public class Grid{
     
     public void createFood(){
     	int pos;
+    	things = new ArrayList<Gridy>(NUMFOOD+NUMORGS);
         for (int i = 0; i < NUMFOOD; i++) {
 			pos = r.nextInt(grid.length);
 			while(grid[pos].thing!=null) {
 				pos = r.nextInt(grid.length);
 			}
-			grid[pos].thing = new Food();
+			grid[pos].thing = new Food(pos%WIDTH,pos/WIDTH);
+			things.add(grid[pos].thing);
 		}
     }
     
@@ -91,8 +97,39 @@ public class Grid{
 			while(grid[pos].thing!=null) {
 				pos = r.nextInt(grid.length);
 			}
-			grid[pos].thing = new Organism();
+			grid[pos].thing = new Organism(pos%WIDTH,pos/WIDTH);
+			things.add(grid[pos].thing);
 		}
+    }
+    
+    public void update() {
+    	for(Gridy g:things) {
+    		g.update();
+    	}
+    	for (int i = 0; i < next.length; i++) {
+			grid[i] = next[i].copy();
+			next[i].thing = null;
+		}
+    }
+    
+    public Gridy thingAt(int x,int y) {
+    	if(x>=0 && x<WIDTH && y>=0 && y<WIDTH)
+    		return grid[x+WIDTH*y].thing;
+    	return null;
+    }
+    
+    public terrain terrainAt(int x,int y) {
+    	if(x>=0 && x<WIDTH && y>=0 && y<WIDTH)
+    		return grid[x+WIDTH*y].terr;
+    	return null;
+    }
+    
+    public void move(int x1,int y1,int x2,int y2) {
+    	if(grid[x1+WIDTH*y1].thing!=null && next[x2+WIDTH*y2]==null) {
+    		next[x2+WIDTH*y2].thing = grid[x1+WIDTH*y1].thing;
+    		next[x2+WIDTH*y2].thing.x = x2;
+    		next[x2+WIDTH*y2].thing.y = y2;
+    	}
     }
     
     public void draw(Graphics2D g){
@@ -102,7 +139,7 @@ public class Grid{
                 g.setColor(grid[a].terr.c());
                 g.fillRect(a%WIDTH*size,a/WIDTH*size,size,size);
                 if(grid[a].thing !=null)
-                	grid[a].thing.draw(g, a%WIDTH*size+1, a/WIDTH*size+1);
+                	grid[a].thing.draw(g);
             }else{
                 System.out.println("Grid space "+(a%WIDTH)+", "+(a/WIDTH)+" is null");
             }

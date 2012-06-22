@@ -1,0 +1,10 @@
+Behavior: GO_FORWARD 2
+	imports: artlife.Organism.direction
+	needs: grid, x, y
+	parameters: dist=1
+	code:
+		if(grid.thingAt(x+dist*dir.dx,y+dist*dir.dy)==null){
+			grid.move(x,y,x+dist*dir.dx,y+dist*dir.dy);
+			return 1;
+		}
+		return 0;

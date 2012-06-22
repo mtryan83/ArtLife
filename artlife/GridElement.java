@@ -13,6 +13,11 @@ public class GridElement{
         terr=terrain.LAND;
     }
     
+    public GridElement(terrain te, Gridy th) {
+    	terr = te;
+    	th = thing;
+    }
+    
     public enum terrain{
         LAND(0,40,5,10,new Color(222,184,135)),
         WATER(40,0,5,10,Color.blue),
@@ -42,6 +47,10 @@ public class GridElement{
                 return 0;
             }
         }
+    }
+    
+    public GridElement copy() {
+    	return new GridElement(terr,thing);
     }
     
 }
