@@ -1,10 +1,32 @@
-Behavior: GO_FORWARD 2
+// This is a comment!
+// The following is an example behavior.  The indentation and white space are unnecessary, though it does help readability.
+//Behavior: EXAMPLE                                  // Declaration of new behavior, name does not need to be in all caps
+//	imports: artlife.Organism.direction        // any valid java import. The classes you might want to import
+//                                                   // are .direction, artlife.GridElement.terrain, and Organism.travel
+//	needs: grid, x, y, dir                     // parameters to the behavior method. options are 
+//                                                   // grid, x, y, energy, color, lts (last thing seen), and dir
+//	parameters: dist=1                         // mutatable values: these are all the values that can be changed during 
+//                                                   // behavior.mutate().  Note that you need a default value
+//        branches: 2                                // number of different following behaviors that are needed
+//	code:                                      // Any valid Java code, but note that once the behavior is completed
+//		if(grid.thingAt(x+dist*dir.dx,y+dist*dir.dy)==null){          // you need to return which behavior comes
+//			grid.move(x,y,x+dist*dir.dx,y+dist*dir.dy);         // next by using next(#), using a different 
+//			return next(1);                                     // number for each seperate behavior.
+//		}                                                             // In this example, next(1) might be SCAN
+//		return next(0);                                               // while next(0) might be TURN_RIGHT
+// 
+// This concludes the Behavior template
+
+
+
+Behavior: GO_FORWARD
 	imports: artlife.Organism.direction
-	needs: grid, x, y
+	needs: grid, x, y, dir
 	parameters: dist=1
+          branches: 2
 	code:
 		if(grid.thingAt(x+dist*dir.dx,y+dist*dir.dy)==null){
 			grid.move(x,y,x+dist*dir.dx,y+dist*dir.dy);
-			return 1;
+			return next(1);
 		}
-		return 0;
+		return next(0);
