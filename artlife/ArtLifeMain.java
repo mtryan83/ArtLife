@@ -24,6 +24,7 @@ public class ArtLifeMain extends JApplet
         	javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
             	public void run() {
              		grid = Grid.getGrid();
+             		setSize(128*6, 128*6);
                 	createGUI();
             	}
         	});
@@ -43,7 +44,8 @@ public class ArtLifeMain extends JApplet
      */
     public static void main(String args[]) 
     {
-        System.out.println("Hello World from Compilr!");
+    	ArtLifeMain main = new ArtLifeMain();
+        main.init();
     }
     
     class DrawPanel extends JPanel{

@@ -3,113 +3,106 @@ package artlife;
 import java.awt.Graphics2D;
 import java.util.Random;
 import artlife.GridElement.terrain;
-import java.util.Arrays;
 
 
 
 public class Grid{
     
     private static Grid me;
-    private final int WIDTH=128;
+    private final int WIDTH=256;
+    private static Random r;
+    protected final int NUMFOOD=100;
+    protected final int NUMORGS=20;
     private static GridElement[] grid;
     
     private Grid(){
+    	r = new Random();
         grid = new GridElement[WIDTH*WIDTH];
         createTerrain();
         createFood();
+        createOrgs();
     }
     
     public void createTerrain(){
         for(int i=0;i<grid.length;i++){
             grid[i] = new GridElement();
         }
-        createTerrain(0,0,WIDTH, new terrain[]{terrain.LAND,terrain.WATER,terrain.MOUNT});
-        for(int i=0;i<grid.length-1;i++){
-            if(!checkIfNeighborsSame(i))
-                grid[i].terr = grid[i+1].terr;
-        }
-        if(!checkIfNeighborsSame(grid.length-1))
-           grid[grid.length-1].terr = grid[grid.length-2].terr;
-    }
-    
-    private boolean checkIfNeighborsSame(int a){
-        terrain t = grid[a].terr;
-        if(a>WIDTH && grid[a-WIDTH].terr == t)
-            return true;
-        if(a<(WIDTH-1)*WIDTH && grid[a+WIDTH].terr == t)
-            return true;
-        if(a%WIDTH>0 && grid[a-1].terr == t)
-            return true;
-        if(a%WIDTH<WIDTH-1 && grid[a+1].terr == t)
-            return true;
-        return false;
-    }
-    
-    private void createTerrain(int x, int y, int size, terrain[] current){
-        if(size<1)
-            return;
-        for(int i=0;i<size*size;i++){
-            grid[x+i%size+WIDTH*(y+i/size)].terr = current[0];
-        }
         
-        int quad = size/2;
-        
-        Random r = new Random();
-        
-        int total=100,same=60+(int)(30*(1-4.0*size/WIDTH));
-        
-        terrain[] temp = new terrain[current.length*total];
-        for(int a=0;a<temp.length;a++){temp[a] = terrain.LAND;}
-        Arrays.fill(temp,0,temp.length*same/total,current[0]);
-        
-        // 0 0 0 0 0 0 0 0 0 1 1 1 2 2 2
-        
-        for(int i=0;i<temp.length*(total-same)/total;i++){
-            temp[i+temp.length*same/total] = current[1+i*total*(current.length-1)/(temp.length*(total-same))];
-        }
-        
-        int newt = r.nextInt(temp.length);
-        terrain[] temp2 = Arrays.copyOf(current,current.length);
-       	swap(temp2,current[0],temp[newt]);
-        createTerrain(x,y,quad, temp2);
-        
-        newt = r.nextInt(temp.length);
-        temp2 = Arrays.copyOf(current, current.length);
-       	swap(temp2,current[0],temp[newt]);
-        createTerrain(x+quad,y,quad, temp2);
-        
-        newt = r.nextInt(temp.length);
-        temp2 = Arrays.copyOf(current, current.length);
-       	swap(temp2,current[0],temp[newt]);
-        createTerrain(x,y+quad,quad, temp2);
-        
-        newt = r.nextInt(temp.length);
-        temp2 = Arrays.copyOf(current, current.length);
-       	swap(temp2,current[0],temp[newt]);
-        createTerrain(x+quad,y+quad,quad, temp2);
-    }
-            
-    private void swap(Object[] arr, Object a, Object b){
-        int index1=0,index2=0;
-        for(int i=0;i<arr.length;i++){
-            if(arr[i].equals(a))
-                index1 = i;
-            if(arr[i].equals(b))
-                index2 = i;
-        }
-        arr[index1] = b;
-        arr[index2] = a;
+    	double seed = Math.random(), seed1 = Math.random(), seed2 = Math.random();
+    	double height=0;
+    	double temp=0;
+    	double c = 4;
+    	double numIters = 4;
+    	
+    	for(int a = 0;a<grid.length;a++) {
+    		height = 0;
+    		temp = 0;
+    		for (int i = 1; i <= numIters; i++) {
+				height += SimplexNoise.noise((a % WIDTH) / i * c / WIDTH * seed1, a / WIDTH
+						/ i * c / WIDTH)/numIters + 1/numIters;
+				temp += SimplexNoise.noise((a % WIDTH) / i * c / WIDTH + seed, a
+						/ WIDTH / i * c / WIDTH * seed2 + seed)/numIters + 1/ numIters;
+			}
+//    		System.out.println(height+" "+temp);
+    		if(height>1.1 && temp>1.2)
+    			grid[a].terr = terrain.MOUNT;
+    		else if(height<.7 && temp <= 1.2)
+    			grid[a].terr = terrain.WATER;
+    		else if(height < .8 && temp > 1.2)
+    			grid[a].terr = terrain.ICE;
+    		else
+    			grid[a].terr = terrain.LAND;
+    	}
+//        for(int i=0;i<grid.length-1;i++){
+//            if(!checkIfNeighborsSame(i))
+//                grid[i].terr = grid[i+1].terr;
+//        }
+//        if(!checkIfNeighborsSame(grid.length-1))
+//           grid[grid.length-1].terr = grid[grid.length-2].terr;
+//    	 private boolean checkIfNeighborsSame(int a){
+//    	        terrain t = grid[a].terr;
+//    	        if(a>WIDTH && grid[a-WIDTH].terr == t)
+//    	            return true;
+//    	        if(a<(WIDTH-1)*WIDTH && grid[a+WIDTH].terr == t)
+//    	            return true;
+//    	        if(a%WIDTH>0 && grid[a-1].terr == t)
+//    	            return true;
+//    	        if(a%WIDTH<WIDTH-1 && grid[a+1].terr == t)
+//    	            return true;
+//    	        return false;
+//    	    }
     }
     
     public void createFood(){
-        
+    	int pos;
+        for (int i = 0; i < NUMFOOD; i++) {
+			pos = r.nextInt(grid.length);
+			while(grid[pos].thing!=null) {
+				pos = r.nextInt(grid.length);
+			}
+			grid[pos].thing = new Food();
+		}
+    }
+    
+    public void createOrgs() {
+    	int pos;
+        for (int i = 0; i < NUMORGS; i++) {
+			pos = r.nextInt(grid.length);
+			while(grid[pos].thing!=null) {
+				pos = r.nextInt(grid.length);
+			}
+			grid[pos].thing = new Organism();
+		}
     }
     
     public void draw(Graphics2D g){
+    	int size = 3;
         for(int a=0;a<WIDTH*WIDTH;a++){
             if(grid[a]!=null && grid[a].terr != null){
                 g.setColor(grid[a].terr.c());
-                g.fillRect(a%WIDTH*6,a/WIDTH*6,6,6);
+                g.fillRect(a%WIDTH*size,a/WIDTH*size,size,size);
+                if(grid[a].thing !=null)
+                	grid[a].thing.draw(g, a%WIDTH*size+1, a/WIDTH*size+1);
             }else{
                 System.out.println("Grid space "+(a%WIDTH)+", "+(a/WIDTH)+" is null");
             }

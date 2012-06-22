@@ -1,6 +1,9 @@
 
 package artlife;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 public class Food implements Gridy{
     private double amount;
     private boolean isPoison;
@@ -25,5 +28,11 @@ public class Food implements Gridy{
     public boolean isPoison(){
         return isPoison;
     }
+
+	@Override
+	public void draw(Graphics2D g, int x, int y) {
+		g.setColor(Color.green);
+		g.drawRect(x, y, 1, 1);
+	}
     
 }
