@@ -13,16 +13,6 @@ public class Organism extends Gridy{
     private boolean poisoned;
     
     
-    public enum direction{
-        UP(0,-1),DWN(0,1),RT(-1,0),LT(1,0);
-        int dx, dy;
-        direction(int x,int y){dx = x; dy = y;}
-    };
-        
-    public enum travel{
-        WALK,SWIM,FLY,ICE;
-    }
-    
     public Organism(int x, int y){
     	super(x,y);
         c = Color.red;
@@ -37,6 +27,30 @@ public class Organism extends Gridy{
     
 	public void update() {
 		//TODO
+	}
+
+	public direction getDir() {
+		return dir;
+	}
+
+	public void setDir(direction dir) {
+		this.dir = dir;
+	}
+
+	public double getEnergy() {
+		return energy;
+	}
+
+	public void setEnergy(double energy) {
+		this.energy = energy;
+	}
+
+	public Color getC() {
+		return c;
+	}
+
+	public boolean isPoisoned() {
+		return poisoned;
 	}
 	
     

@@ -14,5 +14,13 @@ public abstract class Gridy{
 	public abstract void draw(Graphics2D g);
 	
 	public abstract void update();
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
 	
 }
