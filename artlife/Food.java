@@ -31,14 +31,14 @@ public class Food extends Gridy{
     }
 
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, int size) {
 		g.setColor(Color.green);
-		g.drawRect(x+1, y+1, 1, 1);
+		g.drawRect(x*size+1, y*size+1, 1, 1);
 	}
     
 	public boolean isGone() {return amount == 0;}
 	
-	public void update() {
+	public void update(Grid grid) {
 		amount += amount==0?.1:0;
 	}
 	

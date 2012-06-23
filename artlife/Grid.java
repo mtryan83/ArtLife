@@ -2,7 +2,6 @@ package artlife;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 
@@ -10,18 +9,17 @@ import java.util.Random;
 public class Grid{
     
     private static Grid me;
-    private final int WIDTH=256;
+    private final int WIDTH=128;
     private static Random r;
     protected final int NUMFOOD=100;
     protected final int NUMORGS=20;
     private ArrayList<Gridy> things;
-    private static GridElement[] grid, next;
+    private static GridElement[] grid;
     
     private Grid(){
     	r = new Random();
         grid = new GridElement[WIDTH*WIDTH];
         createTerrain();
-        next = Arrays.copyOf(grid, grid.length);
         createFood();
         createOrgs();
     }
@@ -102,43 +100,62 @@ public class Grid{
     }
     
     public void update() {
+    	ArrayList<Gridy> dead = new ArrayList<Gridy>();
     	for(Gridy g:things) {
-    		g.update();
+    		g.update(this);
+    		if(g.isGone())
+    			dead.add(g);
     	}
-    	for (int i = 0; i < next.length; i++) {
-			grid[i] = next[i].copy();
-			next[i].thing = null;
-		}
+    	for(Gridy d:dead) {
+    		things.remove(d);
+    		grid[d.x+WIDTH*d.y].thing=null;
+    	}
+    }
+    
+    public boolean checkCoords(int x, int y) {
+    	return x>=0 && x<WIDTH && y>=0 && y<WIDTH;
     }
     
     public Gridy thingAt(int x,int y) {
-    	if(x>=0 && x<WIDTH && y>=0 && y<WIDTH)
+    	if(checkCoords(x, y))
     		return grid[x+WIDTH*y].thing;
     	return null;
     }
     
     public terrain terrainAt(int x,int y) {
-    	if(x>=0 && x<WIDTH && y>=0 && y<WIDTH)
+    	if(checkCoords(x, y))
     		return grid[x+WIDTH*y].terr;
     	return null;
     }
     
     public void move(int x1,int y1,int x2,int y2) {
-    	if(grid[x1+WIDTH*y1].thing!=null && next[x2+WIDTH*y2]==null) {
-    		next[x2+WIDTH*y2].thing = grid[x1+WIDTH*y1].thing;
-    		next[x2+WIDTH*y2].thing.x = x2;
-    		next[x2+WIDTH*y2].thing.y = y2;
-    	}
+    	if (checkCoords(x1, y1) && checkCoords(x2, y2)) {
+			if (grid[x1 + WIDTH * y1].thing != null
+					&& grid[x2 + WIDTH * y2].thing == null) {
+				Gridy thing = grid[x1 + WIDTH * y1].thing;
+				grid[x2 + WIDTH * y2].thing = thing;
+				grid[x1+WIDTH*y1].thing = null;
+				if (thing instanceof Organism) {
+					((Organism) thing).feed(grid[x2 + WIDTH * y2].terr
+							.cost(((Organism) thing).getMode()));
+				}
+				thing.x = x2;
+				thing.y = y2;
+//				System.out.println("Moved "+x1+" "+y1+" to "+x2+" "+y2);
+			}
+		}
     }
     
     public void draw(Graphics2D g){
-    	int size = 3;
+    	int size = 5;
         for(int a=0;a<WIDTH*WIDTH;a++){
             if(grid[a]!=null && grid[a].terr != null){
                 g.setColor(grid[a].terr.c());
                 g.fillRect(a%WIDTH*size,a/WIDTH*size,size,size);
-                if(grid[a].thing !=null)
-                	grid[a].thing.draw(g);
+                if(grid[a].thing !=null) {
+                	grid[a].thing.draw(g,size);
+//                	System.out.println("Drawing thing");
+                }
             }else{
                 System.out.println("Grid space "+(a%WIDTH)+", "+(a/WIDTH)+" is null");
             }

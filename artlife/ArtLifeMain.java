@@ -16,6 +16,7 @@ public class ArtLifeMain extends JApplet
     
 	private static final long serialVersionUID = 1L;
 	Grid grid;
+	DrawPanel draw;
     
     public void init(){
         //Execute a job on the event-dispatching thread:
@@ -28,13 +29,18 @@ public class ArtLifeMain extends JApplet
                 	createGUI();
             	}
         	});
+        	System.out.println("We are done running.");
+        	DrawThread drawing = new DrawThread();
+        	drawing.start();
+        	ActionThread action = new ActionThread();
+        	action.start();
     	} catch (Exception e) {
         	System.err.println("createGUI didn't successfully complete");
     	}
     }
     
     public void createGUI(){
-        DrawPanel draw = new DrawPanel();
+        draw = new DrawPanel();
     	getContentPane().add(draw, BorderLayout.CENTER);
 
     }
@@ -46,6 +52,35 @@ public class ArtLifeMain extends JApplet
     {
     	ArtLifeMain main = new ArtLifeMain();
         main.init();
+    }
+    
+    class DrawThread extends Thread{
+    	public void run() {
+    		while(true) {
+    			draw.repaint();
+    			try {
+    				sleep(5);
+    			}catch (Exception e) {
+					e.printStackTrace();
+				}
+    		}
+    	}
+    }
+    
+    class ActionThread extends Thread{
+    	public void run() {
+    		int round = 0;
+    		while(true) {
+    			grid.update();
+    			round++;
+    			System.out.println(round);
+    			try {
+    				sleep(5);
+    			}catch(Exception e) {
+    				e.printStackTrace();
+    			}
+    		}
+    	}
     }
     
     class DrawPanel extends JPanel{

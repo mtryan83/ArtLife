@@ -20,4 +20,12 @@ public class GridElement{
     	return new GridElement(terr,thing);
     }
     
+    public void wipe() {
+    	thing = null;
+    }
+    
+    public String toString() {
+    	return terr+(thing==null?" "+thing:"");
+    }
+    
 }
