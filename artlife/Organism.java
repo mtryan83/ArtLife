@@ -14,7 +14,7 @@ public class Organism extends Gridy{
     private Gridy lts;
     private DNA dna;
     private travel mode;
-    
+    private int count=0;
     
     public Organism(int x, int y){
     	super(x,y);
@@ -33,6 +33,14 @@ public class Organism extends Gridy{
     
 	public void update(Grid grid) {
 		energy--;
+		if(poisoned) {
+			energy -= 2;
+			count++;
+			if(count%10==0){
+				count = 0;
+				poisoned = false;
+			}
+		}
 		for(int i=1;i<=4&&lts==null;i++) {
 			lts = grid.thingAt(x+dir.dx*i, y+dir.dy*i);
 		}
