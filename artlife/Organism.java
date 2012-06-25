@@ -9,7 +9,7 @@ public class Organism extends Gridy{
     
     private Color c;
     private direction dir;
-	private double maxE,energy;
+    private double maxE,energy;
     private boolean poisoned;
     private Gridy lts;
     private DNA dna;
@@ -24,6 +24,15 @@ public class Organism extends Gridy{
         energy = maxE = 500;
         dna = DNA.makeDefault();
     }
+
+	public Organism(int x, int y, Color c, travel m, double mE, DNA dna) {
+		super(x,y);
+		this.c = c;
+		dir = direction.UP;
+		mode = m;
+		energy = maxE = mE;
+		this.dna = dna;
+	}
 
 	@Override
 	public void draw(Graphics2D g, int size) {
