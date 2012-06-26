@@ -60,8 +60,8 @@ public class DNA implements Cloneable{
 		int mapoint = (int)(Math.min(ma.dna.size(),pa.dna.size())*Math.random());
 		int papoint = Math.random()>CROSS_EQUAL?mapoint:(int)(pa.dna.size()*Math.random());
 		DNA result = new DNA();
-		result.dna.addAll(ma.dna.sublist(0,mapoint));
-		result.dna.addAll(pa.dna.sublist(papoint, pa.dna.size()-1));
+		result.dna.addAll(ma.dna.subList(0,mapoint));
+		result.dna.addAll(pa.dna.subList(papoint, pa.dna.size()-1));
 		return result;
 	}
 	
