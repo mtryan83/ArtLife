@@ -9,12 +9,12 @@ public class Organism extends Gridy{
     
     private Color c;
     private direction dir;
-	private double maxE,energy;
+    private double maxE,energy;
     private boolean poisoned;
     private Gridy lts;
     private DNA dna;
     private travel mode;
-    
+    private int count=0;
     
     public Organism(int x, int y){
     	super(x,y);
@@ -25,6 +25,15 @@ public class Organism extends Gridy{
         dna = DNA.makeDefault();
     }
 
+	public Organism(int x, int y, Color c, travel m, double mE, DNA dna) {
+		super(x,y);
+		this.c = c;
+		dir = direction.UP;
+		mode = m;
+		energy = maxE = mE;
+		this.dna = dna;
+	}
+
 	@Override
 	public void draw(Graphics2D g, int size) {
 		g.setColor(c);
@@ -33,6 +42,14 @@ public class Organism extends Gridy{
     
 	public void update(Grid grid) {
 		energy--;
+		if(poisoned) {
+			energy -= 2;
+			count++;
+			if(count%10==0){
+				count = 0;
+				poisoned = false;
+			}
+		}
 		for(int i=1;i<=4&&lts==null;i++) {
 			lts = grid.thingAt(x+dir.dx*i, y+dir.dy*i);
 		}
