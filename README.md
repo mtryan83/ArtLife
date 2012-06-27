@@ -37,7 +37,8 @@ Creating Behaviors
 The possible behaviors an organism can have are listed in the Behaviors file.  See that file for syntax.  Adding a new behavior is a simple as adding another behavior to that file, as long as it has the appropriate syntax.  When the next organism is born, this file will be sourced if a behavior is mutated to another type.
 
 
-.TODO
+TODO
+----
 
 - Still need to write REPRODUCE behavior.
 - Add REPRODUCE and SCAN to list of default behaviors.
