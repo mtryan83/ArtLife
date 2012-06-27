@@ -2,26 +2,33 @@ package behaviors;
 
 import java.util.ArrayList;
 
-import artlife.Grid;
-import artlife.Organism;
+import artlife.*;
 
 public class SCAN extends Behavior {
 
-	private double[] weights;
+	private HashMap<String, Double> weights;
 
 	public SCAN(int numBehs) {
 		super(numBehs, 5);
-		weights = new double[];
+		weights = new HashMap<String,Double>();
+		weights.put("artlife.Food", .7);
+		weights.put("artlife.Organism", .3);
 	}
 
 	public SCAN(int numBehs, ArrayList<Integer> n) {
 		super(numBehs, 5, n);
-		weights = new double[];
+		weights = new SortedMap<String, Double>();
 	}
 
 	@Override
 	public int perform(Grid grid, Organism self) {
-		// TODO Auto-generated method stub
+		//HashMap<
+		DirIterator<direction> i = self.getDir().iterator();
+		while(i.hasNext()) {
+			self.setDir(i.next());
+			self.ping(grid);
+			//if(
+		}
 		return 0;
 	}
 
