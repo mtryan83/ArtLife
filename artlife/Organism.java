@@ -50,11 +50,11 @@ public class Organism extends Gridy{
 				poisoned = false;
 			}
 		}
-		ping();
+		ping(grid);
 		dna.performNextBehavior(grid, this);
 	}
 
-	public void ping() {
+	public void ping(Grid grid) {
 		for(int i=1;i<=4&&lts==null;i++) {
 			lts = grid.thingAt(x+dir.dx*i, y+dir.dy*i);
 		}
