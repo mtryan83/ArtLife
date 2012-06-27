@@ -28,4 +28,27 @@ public enum direction{
     		return DN;
     	}
     }
+
+	public Iterator<direction> iterator() {
+		return new DirIterator<direction>(this);
+	}
+
+	class DirIterator<direction> implements Iterator{
+		private int count;
+		private direction current;
+		public DirIterator(direction start){
+			current = start;
+			count = 1;
+		}
+		public boolean hasNext(){ return count<direction.values.length; }
+		public void remove() throws UnsupportedOperationException{ 
+			throw new UnsupportedOperationException("Remove is not supported.");
+		}
+		public direction next(){ return next(false)};
+		public direction next(boolean left) {
+			current = left?current.CCW():current.CW();
+			count++;
+			return current;
+		}		
+	}
 }
