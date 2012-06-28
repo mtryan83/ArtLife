@@ -7,14 +7,12 @@ import artlife.Organism;
 
 public class SCAN extends Behavior {
 
-	public SCAN(int numBehs, int branches) {
-		super(numBehs, branches);
-		// TODO Auto-generated constructor stub
+	public SCAN(int numBehs) {
+		super(numBehs, 5);
 	}
 
-	public SCAN(int numBehs, int branches, ArrayList<Integer> n) {
-		super(numBehs, branches, n);
-		// TODO Auto-generated constructor stub
+	public SCAN(int numBehs, ArrayList<Integer> n) {
+		super(numBehs, 5, n);
 	}
 
 	@Override
@@ -25,8 +23,8 @@ public class SCAN extends Behavior {
 
 	@Override
 	public Behavior clone() {
-		// TODO Auto-generated method stub
-		return null;
+		SCAN temp = new SCAN(next.size(),next);
+		return temp;
 	}
 
 	@Override
