@@ -24,7 +24,7 @@ public class Grid{
         createOrgs();
     }
     
-    public void createTerrain(){
+    protected void createTerrain(){
         for(int i=0;i<grid.length;i++){
             grid[i] = new GridElement();
         }
@@ -74,7 +74,7 @@ public class Grid{
 //    	    }
     }
     
-    public void createFood(){
+    protected void createFood(){
     	int pos;
     	things = new ArrayList<Gridy>(NUMFOOD+NUMORGS);
         for (int i = 0; i < NUMFOOD; i++) {
@@ -87,7 +87,7 @@ public class Grid{
 		}
     }
     
-    public void createOrgs() {
+    protected void createOrgs() {
     	int pos;
         for (int i = 0; i < NUMORGS; i++) {
 			pos = r.nextInt(grid.length);
@@ -112,7 +112,7 @@ public class Grid{
 		things.add(thing);
 	}
     
-    public void update() {
+    protected void update() {
     	ArrayList<Gridy> dead = new ArrayList<Gridy>();
     	for(Gridy g:things) {
     		g.update(this);
@@ -159,7 +159,7 @@ public class Grid{
 		}
     }
     
-    public void draw(Graphics2D g){
+    protected void draw(Graphics2D g){
     	int size = 5;
         for(int a=0;a<WIDTH*WIDTH;a++){
             if(grid[a]!=null && grid[a].terr != null){
