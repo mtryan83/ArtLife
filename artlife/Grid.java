@@ -98,6 +98,19 @@ public class Grid{
 			things.add(grid[pos].thing);
 		}
     }
+
+	public void placeGridy(int x, int y, Gridy thing) {
+		if(!checkCoords(x,y)) {
+			int pos = r.nextInt(grid.length);
+			while(grid[pos].thing!=null) { pos = r.nextInt(grid.length); }
+			grid[pos] = thing;
+			thing.x = pos%WIDTH; thing.y = pos/WIDTH;
+		} else {
+			grid[x+WIDTH*y].thing = thing;
+			thing.x = x; thing.y = y;
+		}
+		things.add(thing);
+	}
     
     public void update() {
     	ArrayList<Gridy> dead = new ArrayList<Gridy>();
