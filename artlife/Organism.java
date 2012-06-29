@@ -10,7 +10,7 @@ public class Organism extends Gridy{
     private Color c;
     private direction dir;
     private double maxE,energy;
-    private boolean poisoned;
+    private boolean poisoned,flashing,flash;
     private Gridy lts;
     private DNA dna;
     private travel mode;
@@ -36,7 +36,14 @@ public class Organism extends Gridy{
 
 	@Override
 	public void draw(Graphics2D g, int size) {
-		g.setColor(c);
+		if(flashing && flash) {
+			flash = !flash;
+			g.setColor(Color.white);
+		}else {
+			if(flashing)
+				flash = !flash;
+			g.setColor(c);
+		}
 		g.drawRect(x*size+1, y*size+1, size/2, size/2);
 	}
     
@@ -86,6 +93,14 @@ public class Organism extends Gridy{
 	
 	public double getMaxE() {
 		return maxE;
+	}
+
+	public boolean isFlashing() {
+		return flashing;
+	}
+
+	public void setFlashing(boolean flashing) {
+		this.flashing = flashing;
 	}
 
 	public Color getC() {

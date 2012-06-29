@@ -35,6 +35,10 @@ public abstract class Behavior implements Cloneable{
 		return next.get(n);
 	}
 	
+	protected double dist2(Gridy a, Gridy b) {
+		return Math.pow(a.getX()-b.getX(), 2)+Math.pow(a.getY()-b.getY(), 2);
+	}
+
 	public static Behavior mutate(Behavior b) {
 		int numSwaps = r.nextInt(b.next.size());
 		int f,s,t;

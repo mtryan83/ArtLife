@@ -1,6 +1,9 @@
 package behaviors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import artlife.*;
 
@@ -26,25 +29,26 @@ public class SCAN extends Behavior {
 	public int perform(Grid grid, Organism self) {
 		Arrays.sort(weights);
 		HashMap<String, Object[]> scan = new HashMap<String, Object[]>();
-		DirIterator<direction> i = self.getDir().iterator();
+		Iterator<direction> i = self.getDir().iterator();
 		Gridy thing;
 		while(i.hasNext()) {
 			self.setDir(i.next());
 			self.ping(grid);
 			thing = self.getLts();
 			if(thing!=null) {
-				if(!scan.contains(things.getClass().getName() || 
-					((Double)scan.get(things.getClass().getName())[1]>dist2(self,thing))
-					scan.put(things.getClass().getName(), new Object[]{self.getDir(),dist2(self,thing)});
+				if(!scan.containsKey(thing.getClass().getName()) || 
+					((Double)scan.get(thing.getClass().getName())[1]>dist2(self,thing)))
+					scan.put(thing.getClass().getName(), new Object[]{self.getDir(),dist2(self,thing)});
 			}
 		}
 		String[] temp;
+		Object[] thingarr;
 		for(String w:weights){
 			temp=w.split(":");
-			thing = scan.get(temp[1]);
-			if(thing!=null) {
-				self.setDir((direction)thing[0]);
-				self.ping();
+			thingarr = scan.get(temp[1]);
+			if(thingarr!=null) {
+				self.setDir((direction)thingarr[0]);
+				self.ping(grid);
 				switch(temp[1]) {
 				case "Food":
 					if(((Food)self.getLts()).isPoison())
@@ -69,13 +73,13 @@ public class SCAN extends Behavior {
 	@Override
 	public Behavior clone() {
 		SCAN temp = new SCAN(next.size(),next);
-		temp.weights = Arrays.copyOf(weights);
+		temp.weights = Arrays.copyOf(weights, weights.length);
 		return temp;
 	}
 
 	@Override
 	public Behavior mutate() {
-		SCAN temp = clone();
+		SCAN temp = (SCAN) clone();
 		double[] del = new double[weights.length];
 		double w;
 		for(int i=0; i<weights.length; i++) {
@@ -88,7 +92,7 @@ public class SCAN extends Behavior {
 			String[] newW = temp.weights[i].split(":");
 			temp.weights[i] = (Double.parseDouble(newW[0])+del[i])+":"+newW[1]; 
 		}
-		return Behaviors.mutate(temp);
+		return Behavior.mutate(temp);
 	}
 
 }

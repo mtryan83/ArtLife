@@ -49,13 +49,9 @@ public class EAT extends Behavior {
 		return next(0);
 	}
 
-	private double dist2(Gridy a,Gridy b) {
-		return Math.pow(a.getX()-b.getX(), 2)+Math.pow(a.getY()-b.getY(), 2);
-	}
-	
 	@Override
 	public Behavior clone() {
-		EAT temp = new EAT(next.size(),next);
+		Behavior temp = new EAT(next.size(),next);
 		return temp;
 	}
 

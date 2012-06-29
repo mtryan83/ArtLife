@@ -1,5 +1,7 @@
 package artlife;
 
+import java.util.Iterator;
+
 public enum direction{
     UP(0,-1),RT(-1,0),DN(0,1),LT(1,0);
     public final int dx, dy;
@@ -30,21 +32,21 @@ public enum direction{
     }
 
 	public Iterator<direction> iterator() {
-		return new DirIterator<direction>(this);
+		return new DirIterator(this);
 	}
-
-	class DirIterator<direction> implements Iterator{
+	
+	class DirIterator implements Iterator<direction>{
 		private int count;
 		private direction current;
 		public DirIterator(direction start){
 			current = start;
 			count = 1;
 		}
-		public boolean hasNext(){ return count<direction.values.length; }
+		public boolean hasNext(){ return count<direction.values().length; }
 		public void remove() throws UnsupportedOperationException{ 
 			throw new UnsupportedOperationException("Remove is not supported.");
 		}
-		public direction next(){ return next(false)};
+		public direction next(){ return next(false);}
 		public direction next(boolean left) {
 			current = left?current.CCW():current.CW();
 			count++;
