@@ -50,6 +50,11 @@ public class Organism extends Gridy{
 				poisoned = false;
 			}
 		}
+		ping(grid);
+		dna.performNextBehavior(grid, this);
+	}
+
+	public void ping(Grid grid) {
 		for(int i=1;i<=4&&lts==null;i++) {
 			lts = grid.thingAt(x+dir.dx*i, y+dir.dy*i);
 		}
@@ -59,7 +64,6 @@ public class Organism extends Gridy{
 		if(lts==null) {
 			lts = grid.thingAt(x+dir.dx*4+dir.CCW().dx, y+dir.dy*4+dir.CCW().dy);
 		}
-		dna.performNextBehavior(grid, this);
 	}
 
 	public direction getDir() {
