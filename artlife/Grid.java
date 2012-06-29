@@ -103,7 +103,7 @@ public class Grid{
 		if(!checkCoords(x,y)) {
 			int pos = r.nextInt(grid.length);
 			while(grid[pos].thing!=null) { pos = r.nextInt(grid.length); }
-			grid[pos] = thing;
+			grid[pos].thing = thing;
 			thing.x = pos%WIDTH; thing.y = pos/WIDTH;
 		} else {
 			grid[x+WIDTH*y].thing = thing;

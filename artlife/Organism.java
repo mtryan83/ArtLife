@@ -125,5 +125,9 @@ public class Organism extends Gridy{
 				 Math.abs(other.c.getGreen()-c.getGreen())<.1 &&
 				 Math.abs(other.c.getAlpha()-c.getAlpha())<.1;
 	}
+
+	public DNA getDNA() {
+		return dna;
+	}
     
 }

@@ -1,7 +1,8 @@
 package behaviors;
 
+import java.awt.Color;
 import java.util.ArrayList;
-import static java.lang.Math;
+import static java.lang.Math.*;
 
 import artlife.*;
 
@@ -28,15 +29,15 @@ public class REPRODUCTION extends Behavior {
 		if(other != null && other instanceof Organism) {
 			if(self.sameSpecies((Organism) other) && dist2(self,other) < 2) {
 				boolean found=false;
-				direction dir;
-				for(int i=0; i < direction.values() && !found; i++) {
+				direction dir = direction.UP;
+				for(int i=0; i < direction.values().length && !found; i++) {
 					dir = direction.values()[i];
 					found = grid.thingAt(self.getX()+dir.dx, self.getY()+dir.dy)
 						 == null ? true : false;
 				}
 				if(!found) { return next(0); }
-				grid.placeGridy(self.getX()+dir.dx, s
-					elf.getY()+dir.dy, mutatedBaby(self,other));
+				grid.placeGridy(self.getX()+dir.dx, 
+						self.getY()+dir.dy, mutatedBaby(self,(Organism) other));
 				return(1);
 			}
 		}
@@ -68,10 +69,12 @@ public class REPRODUCTION extends Behavior {
 
 	@Override
 	public Behavior mutate() {
-		REPRODUCTION temp = clone();
-		temp.delC.setRed(min(255,max(0,temp.delC.getRed()+(r.nextBoolean()?-1:1)*r.nextInt(10))));
-		temp.delC.setBlue(min(255,max(0,temp.delC.getBlue()+(r.nextBoolean()?-1:1)*r.nextInt(10))));
-		temp.delC.setGreen(min(255,max(0,temp.delC.getGreen()+(r.nextBoolean()?-1:1)*r.nextInt(10))));
+		REPRODUCTION temp = (REPRODUCTION) clone();
+		
+		int red = min(255,max(0,temp.delC.getRed()+(r.nextBoolean()?-1:1)*r.nextInt(10)));
+		int b = min(255,max(0,temp.delC.getBlue()+(r.nextBoolean()?-1:1)*r.nextInt(10)));
+		int g = min(255,max(0,temp.delC.getGreen()+(r.nextBoolean()?-1:1)*r.nextInt(10)));
+		temp.delC = new Color(red,b,g);
 		temp.delMode += (r.nextBoolean()?-1:1)*r.nextDouble()/100;
 		temp.delME += (r.nextBoolean()?-1:1)*r.nextDouble()/10;
 		return temp;
