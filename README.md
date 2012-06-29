@@ -41,5 +41,6 @@ TODO
 ----
 
 - Add mutation to different behavior in DNA.java
+- Add n-behavior behavior to allow consistent gene block  
 - Possibly modify terrain generation.
 - Probably should check other behaviors.
