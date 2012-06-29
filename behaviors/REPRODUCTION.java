@@ -69,6 +69,11 @@ public class REPRODUCTION extends Behavior {
 	@Override
 	public Behavior mutate() {
 		REPRODUCTION temp = clone();
+		temp.delC.setRed(min(255,max(0,temp.delC.getRed()+(r.nextBoolean()?-1:1)*r.nextInt(10))));
+		temp.delC.setBlue(min(255,max(0,temp.delC.getBlue()+(r.nextBoolean()?-1:1)*r.nextInt(10))));
+		temp.delC.setGreen(min(255,max(0,temp.delC.getGreen()+(r.nextBoolean()?-1:1)*r.nextInt(10))));
+		temp.delMode += (r.nextBoolean()?-1:1)*r.nextDouble()/100;
+		temp.delME += (r.nextBoolean()?-1:1)*r.nextDouble()/10;
 		return temp;
 	}
 
