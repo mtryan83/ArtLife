@@ -16,6 +16,8 @@ With this definition of a behavior, we use them as the primary genes of our orga
 
 While the end goal is to evolve intresting sets of behaviors, we are uncertain at this time whether our design will produce them.  Thus, the more people who create novel behaviors and run the simulation, the better.
 
+See the [wiki](https://github.com/flugen/ArtLife/wiki/Home) for more information.
+
 
 Usage
 -----
@@ -34,13 +36,16 @@ Alternatively, you can package the files in a .jar file and use that.
 Creating Behaviors
 ------------------
 
-The possible behaviors an organism can have are listed in the Behaviors file.  See that file for syntax.  Adding a new behavior is a simple as adding another behavior to that file, as long as it has the appropriate syntax.  When the next organism is born, this file will be sourced if a behavior is mutated to another type.
+The possible behaviors an organism can have are listed in the behaviors package, and will probably eventually be listed in a Behaviors file. .  Adding a new behavior is a simple as creating a new class that extends Behaviors.java.  See the [Behavior page](https://github.com/flugen/ArtLife/wiki/Behavior) for help.  When the next organism is born (and currently, after a recompile), this file will be sourced if a behavior is mutated to another type.
 
 
 TODO
 ----
 
-- Still need to write REPRODUCE behavior.
-- Add REPRODUCE and SCAN to list of default behaviors.
+- Add mutation to different behavior in DNA.java
+- Add save and load state to ArtLife
+-- Add read/write from file for grid, organisms
+-- Add GUI interface to ArtLifeMain
+- Add n-behavior behavior to allow consistent gene block  
 - Possibly modify terrain generation.
 - Probably should check other behaviors.

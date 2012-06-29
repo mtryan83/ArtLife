@@ -32,10 +32,10 @@ public class GO_FORWARD extends Behavior {
 		if(grid.checkCoords(newx, newy) && 
 				grid.thingAt(newx,newy)==null){
 			grid.move(x,y,newx,newy);
-			return next.get(1);
+			return next(1);
 		}
 //		System.out.println("Tried to move but failed");
-		return next.get(0);
+		return next(0);
 	}
 	
 	public Behavior mutate() {
