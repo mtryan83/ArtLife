@@ -40,6 +40,6 @@ The possible behaviors an organism can have are listed in the Behaviors file.  S
 TODO
 ----
 
-- Add REPRODUCE and SCAN to list of default behaviors.
+- Add mutation to different behavior in DNA.java
 - Possibly modify terrain generation.
 - Probably should check other behaviors.
