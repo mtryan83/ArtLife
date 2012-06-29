@@ -16,6 +16,8 @@ With this definition of a behavior, we use them as the primary genes of our orga
 
 While the end goal is to evolve intresting sets of behaviors, we are uncertain at this time whether our design will produce them.  Thus, the more people who create novel behaviors and run the simulation, the better.
 
+See the [wiki](https://github.com/flugen/ArtLife/wiki/Home) for more information.
+
 
 Usage
 -----
