@@ -41,6 +41,9 @@ TODO
 ----
 
 - Add mutation to different behavior in DNA.java
+- Add save and load state to ArtLife
+-- Add read/write from file for grid, organisms
+-- Add GUI interface to ArtLifeMain
 - Add n-behavior behavior to allow consistent gene block  
 - Possibly modify terrain generation.
 - Probably should check other behaviors.
