@@ -40,7 +40,6 @@ The possible behaviors an organism can have are listed in the Behaviors file.  S
 TODO
 ----
 
-- Still need to write REPRODUCE behavior.
 - Add REPRODUCE and SCAN to list of default behaviors.
 - Possibly modify terrain generation.
 - Probably should check other behaviors.
