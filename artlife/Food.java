@@ -20,10 +20,11 @@ public class Food extends Gridy{
     
     public double feed(){
         double food = Math.random()*10;
-        if(amount-food<0)
-        	food=amount;
+        if(amount-food<0) {
+        	amount = 0;
+        }
         amount -= food;
-        System.out.println(this+" has a bite "+food+" taken out of it");
+        System.out.println(this+" has a bite "+food+" taken out of it, with "+amount+" left.");
         return food*(isPoison?-1:1);
     }
     
@@ -37,7 +38,7 @@ public class Food extends Gridy{
 		g.drawRect(x*size+1, y*size+1, 1, 1);
 	}
     
-	public boolean isGone() {return amount == 0;}
+	public boolean isGone() {return amount <= 0;}
 	
 	public void update(Grid grid) {
 		amount += amount==0?.1:0;

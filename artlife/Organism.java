@@ -62,6 +62,7 @@ public class Organism extends Gridy{
 	}
 
 	public void ping(Grid grid) {
+		lts=null;
 		for(int i=1;i<=4&&lts==null;i++) {
 			lts = grid.thingAt(x+dir.dx*i, y+dir.dy*i);
 		}

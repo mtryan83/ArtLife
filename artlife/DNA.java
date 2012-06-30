@@ -28,7 +28,12 @@ public class DNA implements Cloneable{
 	
 	public void performNextBehavior(Grid grid,Organism self) {
 		int next = current.perform(grid, self);
-		current = dna.get(next);
+		if(next>=dna.size()) {
+			System.out.println("Failed range check: got "+next+" needed <"+dna.size());
+//			current = dna.get(0);
+//			return;
+		}
+		current = dna.get(next%dna.size());
 	}
 	
 	public DNA clone() {
@@ -65,6 +70,7 @@ public class DNA implements Cloneable{
 		DNA result = new DNA();
 		result.dna.addAll(ma.dna.subList(0,mapoint));
 		result.dna.addAll(pa.dna.subList(papoint, pa.dna.size()-1));
+		System.out.println(result.dna.size());
 		result.current = result.dna.get(0);
 		return result;
 	}

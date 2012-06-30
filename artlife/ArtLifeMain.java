@@ -8,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D; 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 /**
  * Note that Java console applications need to be run through the java runtime
@@ -21,7 +23,8 @@ public class ArtLifeMain extends JApplet
 	Grid grid;
 	DrawPanel draw;
 	ActionThread action;
-	boolean paused=false;
+	volatile boolean paused=false;
+	JLabel mouse;
     
     public void init(){
         //Execute a job on the event-dispatching thread:
@@ -46,14 +49,17 @@ public class ArtLifeMain extends JApplet
     
     public void createGUI(){
         draw = new DrawPanel();
+        draw.addMouseMotionListener(new MyMouseMotionListener());
     	getContentPane().add(draw, BorderLayout.CENTER);
+    	JPanel buttPanel = new JPanel();
+    	mouse = new JLabel("Mouse: ");
+    	buttPanel.add(mouse);
     	JButton killAll = new JButton("Kill Everything.");
     	killAll.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     			grid.killAll();
     		}
     	});
-    	JPanel buttPanel = new JPanel();
     	buttPanel.add(killAll);
     	JButton reset = new JButton("Reset");
     	reset.addActionListener(new ActionListener() {
@@ -114,6 +120,8 @@ public class ArtLifeMain extends JApplet
 						e.printStackTrace();
 					}
 				}
+				round = 0;
+//				System.out.println("We are paused...");
 			}
     	}
     }
@@ -128,6 +136,12 @@ public class ArtLifeMain extends JApplet
             grid.draw(g);
             repaint();
         }
+    }
+    
+    class MyMouseMotionListener extends MouseMotionAdapter{
+    	public void mouseMoved(MouseEvent e) {
+    		mouse.setText("Mouse: "+e.getX()/Grid.SIZE+" "+e.getY()/Grid.SIZE);
+    	}
     }
     
 }

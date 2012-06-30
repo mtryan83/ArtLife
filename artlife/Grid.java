@@ -9,11 +9,11 @@ import java.util.Random;
 public class Grid{
     
     private static Grid me;
-    private final int WIDTH=128;
+    protected static final int WIDTH=128, SIZE=5;
     private static Random r;
     protected final int NUMFOOD=100;
     protected final int NUMORGS=20;
-    private ArrayList<Gridy> things, babies;
+    private ArrayList<Gridy> things, babies, dead;
     private static GridElement[] grid;
     
     private Grid(){
@@ -22,6 +22,7 @@ public class Grid{
         createTerrain();
         createFood();
         createOrgs();
+        dead = new ArrayList<>();
     }
     
     protected void createTerrain(){
@@ -114,7 +115,7 @@ public class Grid{
 	}
     
     protected void update() {
-    	ArrayList<Gridy> dead = new ArrayList<>();
+    	dead.clear();
     	things.addAll(babies);
     	babies.clear();
     	for(Gridy g:things) {
@@ -177,13 +178,12 @@ public class Grid{
     }
     
     protected void draw(Graphics2D g){
-    	int size = 5;
         for(int a=0;a<WIDTH*WIDTH;a++){
             if(grid[a]!=null && grid[a].terr != null){
                 g.setColor(grid[a].terr.c());
-                g.fillRect(a%WIDTH*size,a/WIDTH*size,size,size);
+                g.fillRect(a%WIDTH*SIZE,a/WIDTH*SIZE,SIZE,SIZE);
                 if(grid[a].thing !=null) {
-                	grid[a].thing.draw(g,size);
+                	grid[a].thing.draw(g,SIZE);
 //                	System.out.println("Drawing thing");
                 }
             }else{

@@ -14,7 +14,8 @@ public enum direction{
     		return DN;
     	case DN:
     		return LT;
-    	default:
+			//$CASES-OMITTED$
+		default:
     		return UP;
     	}
     }
@@ -26,7 +27,8 @@ public enum direction{
     		return UP;
     	case DN:
     		return RT;
-    	default:
+			//$CASES-OMITTED$
+		default:
     		return DN;
     	}
     }
