@@ -60,7 +60,7 @@ public class REPRODUCTION extends Behavior {
 
 	@Override
 	public Behavior clone() {
-		REPRODUCTION temp = new REPRODUCTION(next.size(),next);
+		REPRODUCTION temp = new REPRODUCTION(numBehs,next);
 		temp.delC = delC;
 		temp.delMode = delMode;
 		temp.delME = delME;

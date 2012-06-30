@@ -23,7 +23,8 @@ public class Food extends Gridy{
         if(amount-food<0)
         	food=amount;
         amount -= food;
-        return Math.rint(food*(isPoison?-1:1));
+        System.out.println(this+" has a bite "+food+" taken out of it");
+        return food*(isPoison?-1:1);
     }
     
     public boolean isPoison(){

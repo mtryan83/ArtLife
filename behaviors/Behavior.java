@@ -7,22 +7,24 @@ import artlife.*;
 
 public abstract class Behavior implements Cloneable{
 	
-	protected int branches=0;
+	protected int numBehs=0;
 	protected static Random r = new Random();
 	protected ArrayList<Integer> next;
 	
 	public Behavior(int numBehs,int branches) {
-		next = new ArrayList<Integer>(branches);
+		next = new ArrayList<>(branches);
 		for (int i = 0; i < branches; i++) {
 			next.add(r.nextInt(numBehs));
 		}
+		this.numBehs = numBehs;
 	}
 	
 	public Behavior(int numBehs, int branches, ArrayList<Integer> n) {
-		next = new ArrayList<Integer>(branches);
+		next = new ArrayList<>(branches);
 		for (int i = 0; i < branches; i++) {
 			next.add(n.get(i));
 		}
+		this.numBehs = branches;
 	}
 	
 	public abstract int perform(Grid grid,Organism self);

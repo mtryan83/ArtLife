@@ -18,7 +18,7 @@ public class GO_FORWARD extends Behavior {
 	}
 	
 	public Behavior clone() {
-		GO_FORWARD temp =  new GO_FORWARD(next.size());
+		GO_FORWARD temp =  new GO_FORWARD(numBehs,next);
 		temp.dist = dist;
 		return temp;
 	}

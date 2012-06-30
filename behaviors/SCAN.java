@@ -28,7 +28,7 @@ public class SCAN extends Behavior {
 	@Override
 	public int perform(Grid grid, Organism self) {
 		Arrays.sort(weights);
-		HashMap<String, Object[]> scan = new HashMap<String, Object[]>();
+		HashMap<String, Object[]> scan = new HashMap<>();
 		Iterator<direction> i = self.getDir().iterator();
 		Gridy thing;
 		while(i.hasNext()) {
@@ -72,7 +72,7 @@ public class SCAN extends Behavior {
 
 	@Override
 	public Behavior clone() {
-		SCAN temp = new SCAN(next.size(),next);
+		SCAN temp = new SCAN(numBehs,next);
 		temp.weights = Arrays.copyOf(weights, weights.length);
 		return temp;
 	}

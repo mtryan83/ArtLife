@@ -13,7 +13,7 @@ public class Grid{
     private static Random r;
     protected final int NUMFOOD=100;
     protected final int NUMORGS=20;
-    private ArrayList<Gridy> things;
+    private ArrayList<Gridy> things, babies;
     private static GridElement[] grid;
     
     private Grid(){
@@ -76,7 +76,7 @@ public class Grid{
     
     protected void createFood(){
     	int pos;
-    	things = new ArrayList<Gridy>(NUMFOOD+NUMORGS);
+    	things = new ArrayList<>(NUMFOOD+NUMORGS);
         for (int i = 0; i < NUMFOOD; i++) {
 			pos = r.nextInt(grid.length);
 			while(grid[pos].thing!=null) {
@@ -97,6 +97,7 @@ public class Grid{
 			grid[pos].thing = new Organism(pos%WIDTH,pos/WIDTH);
 			things.add(grid[pos].thing);
 		}
+        babies = new ArrayList<>();
     }
 
 	public void placeGridy(int x, int y, Gridy thing) {
@@ -109,11 +110,13 @@ public class Grid{
 			grid[x+WIDTH*y].thing = thing;
 			thing.x = x; thing.y = y;
 		}
-		things.add(thing);
+		babies.add(thing);
 	}
     
     protected void update() {
-    	ArrayList<Gridy> dead = new ArrayList<Gridy>();
+    	ArrayList<Gridy> dead = new ArrayList<>();
+    	things.addAll(babies);
+    	babies.clear();
     	for(Gridy g:things) {
     		g.update(this);
     		if(g.isGone())
@@ -123,6 +126,20 @@ public class Grid{
     		things.remove(d);
     		grid[d.x+WIDTH*d.y].thing=null;
     	}
+    }
+    
+    protected boolean allDead() {
+    	int numOrgs=0;
+    	for(Gridy g:things)
+    		if(g instanceof Organism)
+    			numOrgs++;
+    	return numOrgs<=0;
+    }
+    
+    protected void killAll() {
+    	for(Gridy g:things)
+    		if(g instanceof Organism)
+    			((Organism) g).feed(-((Organism) g).getEnergy());
     }
     
     public boolean checkCoords(int x, int y) {
@@ -149,7 +166,7 @@ public class Grid{
 				grid[x2 + WIDTH * y2].thing = thing;
 				grid[x1+WIDTH*y1].thing = null;
 				if (thing instanceof Organism) {
-					((Organism) thing).feed(grid[x2 + WIDTH * y2].terr
+					((Organism) thing).feed(-grid[x2 + WIDTH * y2].terr
 							.cost(((Organism) thing).getMode()));
 				}
 				thing.x = x2;

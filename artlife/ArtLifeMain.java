@@ -1,10 +1,13 @@
 package artlife;
 
 import javax.swing.*;
+
 import java.awt.Color;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D; 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Note that Java console applications need to be run through the java runtime
@@ -17,6 +20,8 @@ public class ArtLifeMain extends JApplet
 	private static final long serialVersionUID = 1L;
 	Grid grid;
 	DrawPanel draw;
+	ActionThread action;
+	boolean paused=false;
     
     public void init(){
         //Execute a job on the event-dispatching thread:
@@ -32,7 +37,7 @@ public class ArtLifeMain extends JApplet
         	System.out.println("We are done running.");
         	DrawThread drawing = new DrawThread();
         	drawing.start();
-        	ActionThread action = new ActionThread();
+        	action = new ActionThread();
         	action.start();
     	} catch (Exception e) {
         	System.err.println("createGUI didn't successfully complete");
@@ -42,7 +47,27 @@ public class ArtLifeMain extends JApplet
     public void createGUI(){
         draw = new DrawPanel();
     	getContentPane().add(draw, BorderLayout.CENTER);
-
+    	JButton killAll = new JButton("Kill Everything.");
+    	killAll.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent e) {
+    			grid.killAll();
+    		}
+    	});
+    	JPanel buttPanel = new JPanel();
+    	buttPanel.add(killAll);
+    	JButton reset = new JButton("Reset");
+    	reset.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				grid.createTerrain();
+				grid.createFood();
+				grid.createOrgs();
+				paused = false;
+			}
+		});
+    	buttPanel.add(reset);
+    	getContentPane().add(buttPanel,BorderLayout.SOUTH);
     }
     
     /**
@@ -52,6 +77,11 @@ public class ArtLifeMain extends JApplet
     {
     	ArtLifeMain main = new ArtLifeMain();
         main.init();
+        JFrame f = new JFrame();
+        f.setContentPane(main);
+        f.setSize(800, 800);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
     }
     
     class DrawThread extends Thread{
@@ -68,18 +98,23 @@ public class ArtLifeMain extends JApplet
     }
     
     class ActionThread extends Thread{
+    	
     	public void run() {
     		int round = 0;
-    		while(true) {
-    			grid.update();
-    			round++;
-    			System.out.println(round);
-    			try {
-    				sleep(5);
-    			}catch(Exception e) {
-    				e.printStackTrace();
-    			}
-    		}
+    		while (true) {
+				while (!paused) {
+					grid.update();
+					round++;
+					System.out.println(round);
+					if(grid.allDead())
+						paused = true;
+					try {
+						sleep(5);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
     	}
     }
     

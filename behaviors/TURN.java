@@ -24,7 +24,7 @@ public class TURN extends Behavior {
 
 	@Override
 	public Behavior clone() {
-		TURN temp = new TURN(next.size(),next);
+		TURN temp = new TURN(numBehs,next);
 		temp.dir = dir;
 		return temp;
 	}

@@ -23,6 +23,7 @@ public class EAT extends Behavior {
 				Food temp = (Food) self.getLts();
 				double amt = temp.feed();
 				self.feed(amt);
+				System.out.println("Eating food..");
 				if (temp.isPoison())
 					return next(1);
 				else if (temp.isGone())
@@ -31,10 +32,10 @@ public class EAT extends Behavior {
 					return next(3);
 			} else if (self.getLts() instanceof Organism) {
 				Organism other = (Organism) self.getLts();
+				System.out.println(self+" trying to eat "+other);
 				if (self.sameSpecies(other))
 					return next(4);
 				else {
-					System.out.println("Trying to eat "+other);
 					if (other.getEnergy() >= self.getEnergy())
 						return next(5);
 					else {
@@ -51,7 +52,7 @@ public class EAT extends Behavior {
 
 	@Override
 	public Behavior clone() {
-		Behavior temp = new EAT(next.size(),next);
+		Behavior temp = new EAT(numBehs,next);
 		return temp;
 	}
 

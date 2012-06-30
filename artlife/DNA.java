@@ -11,7 +11,7 @@ public class DNA implements Cloneable{
 	public static final double MUT_GENE_RATE=.05, MUT_DNA_RATE=.3, CROSS_RATE=.9, CROSS_EQUAL=.7;
 	
 	public DNA() {
-		dna = new ArrayList<Behavior>();
+		dna = new ArrayList<>();
 	}
 	
 	public static DNA makeDefault() {
@@ -65,6 +65,7 @@ public class DNA implements Cloneable{
 		DNA result = new DNA();
 		result.dna.addAll(ma.dna.subList(0,mapoint));
 		result.dna.addAll(pa.dna.subList(papoint, pa.dna.size()-1));
+		result.current = result.dna.get(0);
 		return result;
 	}
 	
