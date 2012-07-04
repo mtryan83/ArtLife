@@ -24,7 +24,7 @@ public class SCAN_TERRAIN extends Behavior {
 
 	@Override
 	public Behavior clone() {
-		SCAN temp = new SCAN(numBehs,next);
+		SCAN_TERRAIN temp = new SCAN_TERRAIN(numBehs,next);
 		return temp;
 	}
 
