@@ -133,11 +133,11 @@ public class ArtLifeMain extends JApplet
     		int round = 0;
     		while (true) {
 				while (!paused) {
-					grid.update();
-					round++;
-					if(grid.allDead())
-						paused = true;
 					try {
+						grid.update();
+						round++;
+						if(grid.allDead())
+							paused = true;
 						sleep(5);
 						if (round%64==0) {
 							System.out.println(round);
