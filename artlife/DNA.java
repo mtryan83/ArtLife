@@ -16,12 +16,13 @@ public class DNA implements Cloneable{
 	
 	public static DNA makeDefault() {
 		DNA temp = new DNA();
-		int count = 5;
+		int count = 6;
 		temp.dna.add(new GO_FORWARD(count));
 		temp.dna.add(new TURN(count));
 		temp.dna.add(new EAT(count));
 		temp.dna.add(new SCAN(count));
 		temp.dna.add(new REPRODUCTION(count));
+		temp.dna.add(new SCAN_TERRAIN(count));
 		temp.current = temp.dna.get(0);
 		return temp;
 	}
