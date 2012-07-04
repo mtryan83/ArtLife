@@ -8,8 +8,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D; 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 /**
  * Note that Java console applications need to be run through the java runtime
@@ -25,6 +28,9 @@ public class ArtLifeMain extends JApplet
 	ActionThread action;
 	volatile boolean paused=false;
 	JLabel mouse;
+	JLabel oldy;
+	JSlider zoom;
+	int x,y, ox, oy, z;
     
     public void init(){
         //Execute a job on the event-dispatching thread:
@@ -50,10 +56,14 @@ public class ArtLifeMain extends JApplet
     public void createGUI(){
         draw = new DrawPanel();
         draw.addMouseMotionListener(new MyMouseMotionListener());
+        draw.addMouseListener(new MyMouseListener());
+        draw.addMouseWheelListener((MouseWheelListener)draw.getMouseListeners()[0]);
     	getContentPane().add(draw, BorderLayout.CENTER);
     	JPanel buttPanel = new JPanel();
     	mouse = new JLabel("Mouse: ");
     	buttPanel.add(mouse);
+    	zoom = new JSlider(1, 50, 10);
+    	buttPanel.add(zoom);
     	JButton killAll = new JButton("Kill Everything.");
     	killAll.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
@@ -73,6 +83,20 @@ public class ArtLifeMain extends JApplet
 			}
 		});
     	buttPanel.add(reset);
+    	JButton center = new JButton("Center on Oldster");
+    	center.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Organism old = grid.oldster;
+				System.out.println("I've lived "+old.age+" and still have "+old.getEnergy()+" energy");
+				x=old.getX()-z/2;
+				y=old.getY()-z/2;
+			}
+		});
+    	buttPanel.add(center);
+    	oldy = new JLabel("Oldest:");
+    	buttPanel.add(oldy);
     	getContentPane().add(buttPanel,BorderLayout.SOUTH);
     }
     
@@ -95,7 +119,7 @@ public class ArtLifeMain extends JApplet
     		while(true) {
     			draw.repaint();
     			try {
-    				sleep(5);
+    				sleep(50);
     			}catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -111,11 +135,14 @@ public class ArtLifeMain extends JApplet
 				while (!paused) {
 					grid.update();
 					round++;
-					System.out.println(round);
 					if(grid.allDead())
 						paused = true;
 					try {
 						sleep(5);
+						if (round%64==0) {
+							System.out.println(round);
+		        			oldy.setText("Oldest: "+grid.oldster.age);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -133,15 +160,46 @@ public class ArtLifeMain extends JApplet
             super.paintComponent(graphics);
             Graphics2D g = (Graphics2D) graphics;
             setBackground(Color.black);
-            grid.draw(g);
+            if(z==0) {z = draw.getWidth()/zoom.getValue(); }
+            grid.draw(g,x,y,Math.min(z, Grid.WIDTH), zoom.getValue());
             repaint();
         }
     }
     
     class MyMouseMotionListener extends MouseMotionAdapter{
     	public void mouseMoved(MouseEvent e) {
-    		mouse.setText("Mouse: "+e.getX()/Grid.SIZE+" "+e.getY()/Grid.SIZE);
+    		mouse.setText("Mouse: "+e.getX()/zoom.getValue()+" "+e.getY()/zoom.getValue());
     	}
+
+    	public void mouseDragged(MouseEvent e) {
+    		int dx = ox-e.getX(), dy = oy-e.getY();
+    		if(x+dx >= 0 && x+dx+z<Grid.WIDTH)
+    			x+=dx;
+    		if(y+dy>=0 && y+dy+z<Grid.WIDTH) {
+    			y += dy;
+    		}
+    		ox = e.getX();
+    		oy = e.getY();
+    		System.out.println(dx+" "+dy);
+    	}
+    }
+    
+    private void fixCoords() {
+		z = draw.getWidth()/zoom.getValue();
+    	if(x+z>Grid.WIDTH)
+    		x -= x+z-Grid.WIDTH;
+    	if(y+z>Grid.WIDTH)
+    		y -= y+z-Grid.WIDTH;
+    }
+    
+    class MyMouseListener extends MouseAdapter{
+    	
+    	public void mouseWheelMoved(MouseWheelEvent e) {
+    		zoom.setValue(e.getWheelRotation()+zoom.getValue());
+    		fixCoords();
+    	}
+    	
+    	
     }
     
 }

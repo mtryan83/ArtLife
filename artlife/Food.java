@@ -35,7 +35,8 @@ public class Food extends Gridy{
 	@Override
 	public void draw(Graphics2D g, int size) {
 		g.setColor(Color.green);
-		g.drawRect(x*size+1, y*size+1, 1, 1);
+		int s2 = size/2;
+		g.drawRect(x*size+s2/2, y*size+s2/2, s2, s2);
 	}
     
 	public boolean isGone() {return amount <= 0;}

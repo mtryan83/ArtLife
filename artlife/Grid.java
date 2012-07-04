@@ -9,12 +9,14 @@ import java.util.Random;
 public class Grid{
     
     private static Grid me;
-    protected static final int WIDTH=128, SIZE=5;
+    protected static final int WIDTH=1024, SIZE=5;
     private static Random r;
-    protected final int NUMFOOD=100;
-    protected final int NUMORGS=20;
+    protected final int NUMFOOD=400;
+    protected final int NUMORGS=160;
+    private static int numorgs;
     private ArrayList<Gridy> things, babies, dead;
     private static GridElement[] grid;
+    protected Organism oldster;
     
     private Grid(){
     	r = new Random();
@@ -99,6 +101,20 @@ public class Grid{
 			things.add(grid[pos].thing);
 		}
         babies = new ArrayList<>();
+        numorgs = NUMORGS;
+    }
+    
+    public void addOrgs() {
+    	int pos;
+    	 for (int i = 0; i < NUMORGS/10-numorgs; i++) {
+ 			pos = r.nextInt(grid.length);
+ 			while(grid[pos].thing!=null) {
+ 				pos = r.nextInt(grid.length);
+ 			}
+ 			grid[pos].thing = new Organism(pos%WIDTH,pos/WIDTH);
+ 			things.add(grid[pos].thing);
+ 		}
+    	 numorgs = NUMORGS/10;
     }
 
 	public void placeGridy(int x, int y, Gridy thing) {
@@ -118,14 +134,29 @@ public class Grid{
     	dead.clear();
     	things.addAll(babies);
     	babies.clear();
+    	Organism old = null;
+    	int max=0;
     	for(Gridy g:things) {
     		g.update(this);
     		if(g.isGone())
     			dead.add(g);
+    		else if(g instanceof Organism) {
+    			if(((Organism)g).age>max) {
+    				old = (Organism)g;
+    				max = old.age;
+    			}
+    		}
     	}
+    	oldster = old;
     	for(Gridy d:dead) {
+    		if(d instanceof Organism) {
+    			numorgs--;
+    		}
     		things.remove(d);
     		grid[d.x+WIDTH*d.y].thing=null;
+    	}
+    	if(numorgs>0 && numorgs < NUMORGS/10) {
+    		addOrgs();
     	}
     }
     
@@ -177,19 +208,32 @@ public class Grid{
 		}
     }
     
-    protected void draw(Graphics2D g){
-        for(int a=0;a<WIDTH*WIDTH;a++){
-            if(grid[a]!=null && grid[a].terr != null){
-                g.setColor(grid[a].terr.c());
-                g.fillRect(a%WIDTH*SIZE,a/WIDTH*SIZE,SIZE,SIZE);
-                if(grid[a].thing !=null) {
-                	grid[a].thing.draw(g,SIZE);
-//                	System.out.println("Drawing thing");
-                }
-            }else{
-                System.out.println("Grid space "+(a%WIDTH)+", "+(a/WIDTH)+" is null");
-            }
-        }
+    protected void draw(Graphics2D g, int x, int y, int z, int size){
+    	int pos;
+    	for(int a=0;a<z*z;a++) {
+    		pos = a % z + x + (y + a / z) * WIDTH;
+    		if (grid[pos] != null && grid[a].terr != null) {
+    			g.setColor(grid[pos].terr.c());
+    			g.fillRect(a % z * size, a / z * size, size, size);
+    			if (grid[pos].thing != null) {
+    				grid[pos].thing.draw(g, size);
+    				//                	System.out.println("Drawing thing");
+
+    			}
+    		}
+    	}
+//        for(int a=0;a<WIDTH*WIDTH;a++){
+//            if(grid[a]!=null && grid[a].terr != null){
+//                g.setColor(grid[a].terr.c());
+//                g.fillRect(a%WIDTH*SIZE,a/WIDTH*SIZE,SIZE,SIZE);
+//                if(grid[a].thing !=null) {
+//                	grid[a].thing.draw(g,SIZE);
+////                	System.out.println("Drawing thing");
+//                }
+//            }else{
+//                System.out.println("Grid space "+(a%WIDTH)+", "+(a/WIDTH)+" is null");
+//            }
+//        }
     }
     
     public static Grid getGrid(){

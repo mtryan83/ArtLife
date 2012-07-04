@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 public class Organism extends Gridy{
     
     private Color c;
+    protected int age;
     private direction dir;
     private double maxE,energy;
     private boolean poisoned,flashing,flash;
@@ -23,6 +24,7 @@ public class Organism extends Gridy{
         mode = travel.WALK;
         energy = maxE = 500;
         dna = DNA.makeDefault();
+        age = 0;
     }
 
 	public Organism(int x, int y, Color c, travel m, double mE, DNA dna) {
@@ -32,6 +34,7 @@ public class Organism extends Gridy{
 		mode = m;
 		energy = maxE = mE;
 		this.dna = dna;
+		age = 0;
 	}
 
 	@Override
@@ -44,11 +47,13 @@ public class Organism extends Gridy{
 				flash = !flash;
 			g.setColor(c);
 		}
-		g.drawRect(x*size+1, y*size+1, size/2, size/2);
+		int s2 = size/2;
+		g.drawRect(x*size+s2/2, y*size+s2/2, s2, s2);
 	}
     
 	public void update(Grid grid) {
 		energy--;
+		age++;
 		if(poisoned) {
 			energy -= 2;
 			count++;
