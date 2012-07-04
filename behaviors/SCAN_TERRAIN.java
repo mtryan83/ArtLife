@@ -17,7 +17,7 @@ public class SCAN_TERRAIN extends Behavior {
 	@Override
 	public int perform(Grid grid, Organism self) {
 		terrain t = grid.terrainAt(self.getX()+self.getDir().dx, self.getY()+self.getDir().dy);
-		if(t.cost(self.getMode())>grid.terrainAt(self.getX(), self.getY()).cost(self.getMode()))
+		if(t==null || t.cost(self.getMode())>grid.terrainAt(self.getX(), self.getY()).cost(self.getMode()))
 			return next(1);
 		return next(0);
 	}

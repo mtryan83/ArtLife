@@ -117,8 +117,8 @@ public class ArtLifeMain extends JApplet
     class DrawThread extends Thread{
     	public void run() {
     		while(true) {
-    			draw.repaint();
     			try {
+    				draw.repaint();
     				sleep(50);
     			}catch (Exception e) {
 					e.printStackTrace();
