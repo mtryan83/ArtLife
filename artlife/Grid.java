@@ -210,14 +210,19 @@ public class Grid{
     
     protected void draw(Graphics2D g, int x, int y, int z, int size){
     	int pos;
+        HashMap<terrain, BufferedImage> map = new HashMap<>();
+        for(terrain t:terrain.values()) {
+            map.put(t, t.draw(size));
+        }
     	for(int a=0;a<z*z;a++) {
     		pos = a % z + x + (y + a / z) * WIDTH;
     		if (grid[pos] != null && grid[a].terr != null) {
     			g.setColor(grid[pos].terr.c());
-    			g.fillRect(a % z * size, a / z * size, size, size);
-    			if (grid[pos].thing != null) {
+    			//g.fillRect(a % z * size, a / z * size, size, size);
+    			g.drawImage(map.get(grid[pos].terr), null, a % z * size, a / z * size);
+                             if (grid[pos].thing != null) {
     				grid[pos].thing.draw(g, size);
-    				//                	System.out.println("Drawing thing");
+//                	System.out.println("Drawing thing");
 
     			}
     		}
