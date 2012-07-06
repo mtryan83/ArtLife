@@ -13,8 +13,8 @@ public class Grid{
     private static Grid me;
     protected static final int WIDTH=1024, SIZE=5;
     private static Random r;
-    protected final int NUMFOOD=400;
-    protected final int NUMORGS=160;
+    protected final int NUMFOOD=800;
+    protected final int NUMORGS=320;
     private static int numorgs;
     private ArrayList<Gridy> things, babies, dead;
     private static GridElement[] grid;
@@ -116,7 +116,7 @@ public class Grid{
  			grid[pos].thing = new Organism(pos%WIDTH,pos/WIDTH);
  			things.add(grid[pos].thing);
  		}
-    	 numorgs = NUMORGS/10;
+    	 numorgs = NUMORGS/5;
     }
 
 	public void placeGridy(int x, int y, Gridy thing) {
@@ -157,7 +157,7 @@ public class Grid{
     		things.remove(d);
     		grid[d.x+WIDTH*d.y].thing=null;
     	}
-    	if(numorgs>0 && numorgs < NUMORGS/10) {
+    	if(numorgs>0 && numorgs < NUMORGS/5) {
     		addOrgs();
     	}
     }
@@ -222,9 +222,9 @@ public class Grid{
     			g.setColor(grid[pos].terr.c());
     			//g.fillRect(a % z * size, a / z * size, size, size);
     			g.drawImage(map.get(grid[pos].terr), null, a % z * size, a / z * size);
-                             if (grid[pos].thing != null) {
+    			if (grid[pos].thing != null) {
     				grid[pos].thing.draw(g, size);
-//                	System.out.println("Drawing thing");
+                	//System.out.println("Drawing thing");
 
     			}
     		}

@@ -119,6 +119,7 @@ public class ArtLifeMain extends JApplet
     		while(true) {
     			try {
     				draw.repaint();
+        			oldy.setText("Oldest: "+grid.oldster.age);
     				sleep(50);
     			}catch (Exception e) {
 					e.printStackTrace();
@@ -141,7 +142,6 @@ public class ArtLifeMain extends JApplet
 						sleep(5);
 						if (round%64==0) {
 							System.out.println(round);
-		        			oldy.setText("Oldest: "+grid.oldster.age);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
