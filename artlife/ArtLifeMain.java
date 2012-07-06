@@ -172,7 +172,7 @@ public class ArtLifeMain extends JApplet
     	}
 
     	public void mouseDragged(MouseEvent e) {
-    		int dx = ox-e.getX(), dy = oy-e.getY();
+    		int dx = (int)Math.signum(ox-e.getX()), dy = (int)Math.signum(oy-e.getY());
     		if(x+dx >= 0 && x+dx+z<Grid.WIDTH)
     			x+=dx;
     		if(y+dy>=0 && y+dy+z<Grid.WIDTH) {
